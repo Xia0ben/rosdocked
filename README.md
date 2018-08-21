@@ -30,7 +30,7 @@ You must first download the NaoQi SDK on Softbank Robotics Website (create an ac
 Then you can run the docker image.
 
 ```
-./dock.sh <IMAGE_NAME>
+./run.sh <IMAGE_NAME>
 ```
 
 The image shares it's  network interface with the host, so you can run this in multiple terminals for multiple hooks into the docker environment.
@@ -39,7 +39,7 @@ The image shares it's  network interface with the host, so you can run this in m
 
 The following instructions are inspired by the [official getting started tutorial](http://wiki.ros.org/pepper/Tutorials).
 
-Finally, to get started with Pepper, once the container is launched and you are sshed in it start a roscore :
+To get started with Pepper, once you are on the same network as Pepper and know its IP address (quickly press the power button on its chest for it to spell it and ping this address), the container is launched and you are sshed in it start a roscore :
 
 ```
 # Inside the container
@@ -57,7 +57,7 @@ Then, to start making your roscore with Pepper, do :
 
 ```
 # Inside the container
-roslaunch pepper_bringup pepper_full_py.launch nao_ip:=<YOUR_PEPPER_IP> roscore_ip:=localhost
+roslaunch pepper_bringup pepper_full.launch nao_ip:=<YOUR_PEPPER_IP> roscore_ip:=localhost network_interface:=<YOUR_NETWORK_INTERFACE>
 ```
 
 Open yet another terminal, log into the docker container and launch rviz to see the state of Pepper in real time :
@@ -67,4 +67,4 @@ Open yet another terminal, log into the docker container and launch rviz to see 
 rviz rviz -d $HOME/catkin_ws/src/naoqi_driver/share/pepper.rviz
 ```
 
-You'll probably need, for the laser sensors, sonars, point cloud and camera feed to display properly, to change the topic that are being listened to another (simply click on it in the left column and a menu proposing only the likely appropriate topics will appear).
+You'll probably need, for the laser sensors, sonars, point cloud and camera feed to display properly, to change the default  topics that are being listened by rviz to another (simply click on it in the left column and a menu proposing only the likely appropriate topics will appear).
