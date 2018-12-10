@@ -39,31 +39,42 @@ Then you can run the docker image.
 
 The following instructions are inspired by the [official getting started tutorial](http://wiki.ros.org/pepper/Tutorials).
 
+To make things easier, we suggest adding two aliases to your .bashrc, so that you don't spend hours typing the same lines over and over again. The first alias sources different files so that ros commands autocompletion works properly. The second one calls upon the first and sets two environment variables that allow the ROS-to-Pepper bridge to work properly. Every time you do a "catkin build" or "catkin_make" to build your ros packages, do a "pepper_init" right after to be sure that you've sourced the newly built files properly.
+
+```
+# On the host bash session
+echo 'alias ros_init="source /opt/ros/kinetic/setup.bash && source /usr/share/gazebo/setup.sh && source ~/catkin_ws/devel/setup.bash"' >> ~/.bashrc
+echo 'alias pepper_init="ros_init && export AL_DIR=$HOME/catkin_ws/src/pepper/naoqi_sdk && export PYTHONPATH='$PYTHONPATH:$AL_DIR/pynaoqi'"' >> ~/.bashrc
+```
+
 To get started with Pepper, once you are on the same network as Pepper and know its IP address (quickly press the power button on its chest for it to spell it and ping this address), the container is launched and you are sshed in it start a roscore :
 
 ```
-# Inside the container
+# Inside the container bash session
 roscore
+pepper_init
 ```
 
 Open another terminal and log into the docker container :
 
 ```
-# On the host
+# On the host bash session
 sudo docker exec -it <CONTAINER_NAME> bash
+# Inside the container bash session
+pepper_init
 ```
 
 Then, to start making your roscore communicate with Pepper, do :
 
 ```
-# Inside the container
+# Inside the container bash session
 roslaunch pepper_bringup pepper_full.launch nao_ip:=<YOUR_PEPPER_IP> roscore_ip:=localhost network_interface:=<YOUR_NETWORK_INTERFACE>
 ```
 
 Open yet another terminal, log into the docker container and launch rviz to see the state of Pepper in real time :
 
 ```
-# Inside the container
+# Inside the container bash session
 rviz rviz -d $HOME/catkin_ws/src/naoqi_driver/share/pepper.rviz
 ```
 
