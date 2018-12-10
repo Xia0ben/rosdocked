@@ -35,8 +35,6 @@ Then you can run the docker image.
 ./run.sh <IMAGE_NAME>
 ```
 
-The image shares it's  network interface with the host, so you can run this in multiple terminals for multiple hooks into the docker environment.
-
 ### Getting started with Pepper
 
 The following instructions are inspired by the [official getting started tutorial](http://wiki.ros.org/pepper/Tutorials).
