@@ -52,6 +52,9 @@ RUN apt-get install -y\
 # Additional packages for Pepper
 RUN apt-get install -y ros-kinetic-pepper-.*
 
+# Additional general purpose packages
+RUN apt-get install -y ros-kinetic-map-server ros-kinetic-amcl ros-kinetic-navigation
+
 # Add NaoQi API to PYTHONPATH after downloading and extracting it to
 # $HOME/catkin_ws/src/naoqi_sdk and renaming the folder into "pynaoqi"
 RUN echo 'export AL_DIR=$HOME/catkin_ws/src/naoqi_sdk' >> ~/.bashrc && \
@@ -70,7 +73,10 @@ RUN mkdir -p ~/catkin_ws/src && \
   # (see https://stackoverflow.com/questions/20635472/using-the-run-instruction-in-a-dockerfile-with-source-does-not-work)
 
 ########################## PEPPER SPECIFIC LINES ##########################
-  
+
+# Install JRE+JDK to be able to run Eclipse within the container
+RUN apt-get install -y default-jre default-jdk
+
 # Make SSH available
 EXPOSE 22
 

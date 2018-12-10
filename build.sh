@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Check args
-if [ "$#" -ne 1 ]; then
-  echo "usage: ./build.sh IMAGE_NAME"
-  return 1
+if [ "$#" -ne 2 ]; then
+  echo "usage: ./build.sh IMAGE_NAME PATH/TO/DOCKERFILE/FOLDER"
+  exit
 fi
 
 # Get this script's path
@@ -18,4 +18,4 @@ sudo docker build\
   --build-arg home=$HOME\
   --build-arg workspace=$SCRIPTPATH\
   --build-arg shell=$SHELL\
-  -t $1 .
+  -t $1 $2

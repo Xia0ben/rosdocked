@@ -10,10 +10,12 @@ For more info on Docker see here: https://docs.docker.com/engine/installation/li
 
 ### Build
 
+If you want to build the image yourself and not use the provided one, simply follow the next instruction.
+
 This will create the image with your user/group ID and home directory.
 
 ```
-./build.sh <IMAGE_NAME>
+./build.sh <IMAGE_NAME> ./
 ```
 
 ### Run
@@ -23,7 +25,7 @@ You must first download the NaoQi SDK on Softbank Robotics Website (create an ac
 Then you can run the docker image.
 
 ```
-./dock.sh <IMAGE_NAME>
+./run.sh <IMAGE_NAME>
 ```
 
 The image shares it's  network interface with the host, so you can run this in multiple terminals for multiple hooks into the docker environment.
@@ -32,7 +34,7 @@ The image shares it's  network interface with the host, so you can run this in m
 
 The following instructions are inspired by the [official getting started tutorial](http://wiki.ros.org/pepper/Tutorials).
 
-Finally, to get started with Pepper, once the container is launched and you are sshed in it start a roscore :
+Finally, to get started with Pepper, once the container is launched and you are logged in it start a roscore :
 
 ```
 # Inside the container
@@ -46,7 +48,7 @@ Open another terminal and log into the docker container :
 sudo docker exec -it <CONTAINER_NAME> bash
 ```
 
-Then, to start making your roscore with Pepper, do :
+Then, to start making your roscore communicate with Pepper, do :
 
 ```
 # Inside the container
