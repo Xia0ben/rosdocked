@@ -8,6 +8,13 @@ Note that any changes made outside of your home directory from within the Docker
 
 For more info on Docker see here: https://docs.docker.com/engine/installation/linux/ubuntulinux/
 
+### Quick start - Get the pre-built image
+
+Simply do :
+```
+sudo docker pull xia0ben/rosdocked-kinetic-pepper:latest
+```
+
 ### Build
 
 If you want to build the image yourself and not use the provided one, simply follow the next instruction.
@@ -34,7 +41,7 @@ The image shares it's  network interface with the host, so you can run this in m
 
 The following instructions are inspired by the [official getting started tutorial](http://wiki.ros.org/pepper/Tutorials).
 
-Finally, to get started with Pepper, once the container is launched and you are logged in it start a roscore :
+To get started with Pepper, once you are on the same network as Pepper and know its IP address (quickly press the power button on its chest for it to spell it and ping this address), the container is launched and you are sshed in it start a roscore :
 
 ```
 # Inside the container
@@ -52,7 +59,7 @@ Then, to start making your roscore communicate with Pepper, do :
 
 ```
 # Inside the container
-roslaunch pepper_bringup pepper_full_py.launch nao_ip:=<YOUR_PEPPER_IP> roscore_ip:=localhost
+roslaunch pepper_bringup pepper_full.launch nao_ip:=<YOUR_PEPPER_IP> roscore_ip:=localhost network_interface:=<YOUR_NETWORK_INTERFACE>
 ```
 
 Open yet another terminal, log into the docker container and launch rviz to see the state of Pepper in real time :
@@ -62,4 +69,4 @@ Open yet another terminal, log into the docker container and launch rviz to see 
 rviz rviz -d $HOME/catkin_ws/src/naoqi_driver/share/pepper.rviz
 ```
 
-You'll probably need, for the laser sensors, sonars, point cloud and camera feed to display properly, to change the topic that are being listened to another (simply click on it in the left column and a menu proposing only the likely appropriate topics will appear).
+You'll probably need, for the laser sensors, sonars, point cloud and camera feed to display properly, to change the default  topics that are being listened by rviz to another (simply click on it in the left column and a menu proposing only the likely appropriate topics will appear).
