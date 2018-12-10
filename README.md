@@ -44,7 +44,7 @@ To make things easier, we suggest adding two aliases to your .bashrc, so that yo
 ```
 # On the host bash session
 echo 'alias ros_init="source /opt/ros/kinetic/setup.bash && source /usr/share/gazebo/setup.sh && source ~/catkin_ws/devel/setup.bash"' >> ~/.bashrc
-echo 'alias pepper_init="ros_init && export AL_DIR=$HOME/catkin_ws/src/pepper/naoqi_sdk && export PYTHONPATH='$PYTHONPATH:$AL_DIR/pynaoqi'"' >> ~/.bashrc
+echo 'alias pepper_init="ros_init && export AL_DIR=$HOME/catkin_ws/src/pepper/naoqi_sdk && export PYTHONPATH=$PYTHONPATH:$AL_DIR/pynaoqi"' >> ~/.bashrc
 ```
 
 To get started with Pepper, once you are on the same network as Pepper and know its IP address (quickly press the power button on its chest for it to spell it and ping this address), the container is launched and you are sshed in it start a roscore :
