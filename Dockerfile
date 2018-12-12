@@ -36,43 +36,19 @@ RUN apt-get install -y ros-kinetic-desktop-full=1.3.2-0*
 RUN apt-get install -y x11-apps python-pip build-essential
 RUN sudo pip install catkin_tools 
 
-########################## PEPPER SPECIFIC LINES ##########################
+########################## TURTLEBOT3 SPECIFIC LINES ##########################
 
-# Additional packages for Pepper prerequisites
-RUN apt-get install -y\
-  ros-kinetic-driver-base\
-  ros-kinetic-move-base-msgs\
-  ros-kinetic-octomap\
-  ros-kinetic-octomap-msgs\
-  ros-kinetic-humanoid-msgs\
-  ros-kinetic-humanoid-nav-msgs\
-  ros-kinetic-camera-info-manager\
-  ros-kinetic-camera-info-manager-py
-  
-# Additional packages for Pepper
-RUN apt-get install -y ros-kinetic-pepper-.*
+# Additional packages for Turtlebot3 prerequisites
+RUN sudo apt-get install -y\
+  ros-kinetic-joy ros-kinetic-teleop-twist-joy ros-kinetic-teleop-twist-keyboard\
+  ros-kinetic-laser-proc ros-kinetic-rgbd-launch ros-kinetic-depthimage-to-laserscan\
+  ros-kinetic-rosserial-arduino ros-kinetic-rosserial-python ros-kinetic-rosserial-server\
+  ros-kinetic-rosserial-client ros-kinetic-rosserial-msgs ros-kinetic-amcl\
+  ros-kinetic-map-server ros-kinetic-move-base ros-kinetic-urdf ros-kinetic-xacro\
+  ros-kinetic-compressed-image-transport ros-kinetic-rqt-image-view ros-kinetic-gmapping\
+  ros-kinetic-navigation ros-kinetic-interactive-markers
 
-# Additional general purpose packages
-RUN apt-get install -y ros-kinetic-map-server ros-kinetic-amcl ros-kinetic-navigation
-
-# Add NaoQi API to PYTHONPATH after downloading and extracting it to
-# $HOME/catkin_ws/src/naoqi_sdk and renaming the folder into "pynaoqi"
-RUN echo 'export AL_DIR=$HOME/catkin_ws/src/naoqi_sdk' >> ~/.bashrc && \
-  echo 'export PYTHONPATH="$PYTHONPATH:$AL_DIR/pynaoqi"' >> ~/.bashrc
-
-# Get Naoqi Driver and link it to ROS
-RUN mkdir -p ~/catkin_ws/src && \
-  cd ~/catkin_ws/src && \
-  git clone https://github.com/ros-naoqi/naoqi_driver.git && \
-  rosdep install -i -y --from-paths ./naoqi_driver && \
-  echo 'source /opt/ros/kinetic/setup.sh' >> ~/.bashrc && \
-  /bin/bash -c "source /opt/ros/kinetic/setup.sh && cd ../ && catkin_make"
-  # Run source command through a bash instance otherwise image build fails,
-  # then execute catkin_make within the same instance, otherwise, command
-  # is considered not to exist.
-  # (see https://stackoverflow.com/questions/20635472/using-the-run-instruction-in-a-dockerfile-with-source-does-not-work)
-
-########################## PEPPER SPECIFIC LINES ##########################
+########################## TURTLEBOT3 SPECIFIC LINES ##########################
 
 # Install JRE+JDK to be able to run Eclipse within the container
 RUN apt-get install -y default-jre default-jdk

@@ -8,74 +8,94 @@ Note that any changes made outside of your home directory from within the Docker
 
 For more info on Docker see here: https://docs.docker.com/engine/installation/linux/ubuntulinux/
 
-### Quick start - Get the pre-built image
-
-Simply do :
-```
-sudo docker pull xia0ben/rosdocked-kinetic-pepper:latest
-```
-
 ### Build
 
-If you want to build the image yourself and not use the provided one, simply follow the next instruction.
+To build the image yourself, simply follow the next instruction.
 
 This will create the image with your user/group ID and home directory.
 
 ```
-./build.sh <IMAGE_NAME> ./
+./build.sh <IMAGE_NAME>
 ```
 
 ### Run
 
-You must first download the NaoQi SDK on Softbank Robotics Website (create an account and download the "pynaoqi-python-2.7-naoqi-x.x-linux32.tar.gz" file on the [Aldebaran Website](https://community.aldebaran.com/en/resources/software) with a version adequate to the Naoqi version your Pepper has installed on itself). The archive must be extracted into a "~/catkin_ws/src/naoqi_sdk" folder and the resulting subfolder must be renamed into "pynaoqi".
-
-Then you can run the docker image.
+You can run the docker image simply by typing the command below :
 
 ```
-./run.sh <IMAGE_NAME>
+./run.sh <IMAGE_NAME> <CONTAINER_NAME>
 ```
 
-### Getting started with Pepper
+### Getting started with Turtlebot
 
-The following instructions are inspired by the [official getting started tutorial](http://wiki.ros.org/pepper/Tutorials).
+The following instructions are inspired by the [official getting started tutorial](http://emanual.robotis.com/docs/en/platform/turtlebot3/pc_setup/#pc-setup).
 
-To make things easier, we suggest adding two aliases to your .bashrc, so that you don't spend hours typing the same lines over and over again. The first alias sources different files so that ros commands autocompletion works properly. The second one calls upon the first and sets two environment variables that allow the ROS-to-Pepper bridge to work properly. Every time you do a "catkin build" or "catkin_make" to build your ros packages, do a "pepper_init" right after to be sure that you've sourced the newly built files properly.
+To make things easier, we suggest adding two aliases to your .bashrc, so that you don't spend hours typing the same lines over and over again. The first alias sources different files so that ros commands autocompletion works properly. The second one calls upon the first and sets one environment variable that allows the various Turtlebot3 packages to know which model you are using (here, the "burger" one). Every time you do a "catkin build" or "catkin_make" to build your ros packages, do a "turtlebot_init" right after to be sure that you've sourced the newly built files properly.
 
 ```
 # On the host bash session
-echo 'alias ros_init="source /opt/ros/kinetic/setup.bash && source /usr/share/gazebo/setup.sh && source ~/catkin_ws/devel/setup.bash"' >> ~/.bashrc
-echo 'alias pepper_init="ros_init && export AL_DIR=$HOME/catkin_ws/src/pepper/naoqi_sdk && export PYTHONPATH=$PYTHONPATH:$AL_DIR/pynaoqi"' >> ~/.bashrc
+echo 'alias ros_init="source /opt/ros/kinetic/setup.bash && source /usr/share/gazebo/setup.sh && source ~/catkin_ws/devel/setup.bash"' >> ~/.bashrc &&\
+  echo 'alias turtlebot_init="ros_init && export TURTLEBOT3_MODEL=burger"' >> ~/.bashrc
 ```
 
-To get started with Pepper, once you are on the same network as Pepper and know its IP address (quickly press the power button on its chest for it to spell it and ping this address), the container is launched and you are sshed in it start a roscore :
+Then, you must clone a few package repositories from Robotis, and catkin-build them (operation inside the container !) :
 
 ```
 # Inside the container bash session
-roscore
-pepper_init
+cd ~/catkin_ws/src/ &&\
+  git clone https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git\
+  git clone https://github.com/ROBOTIS-GIT/turtlebot3.git\
+  git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git\
+  git clone https://github.com/ROBOTIS-GIT/turtlebot3_gazebo_plugin.git\
+  cd ~/catkin_ws &&\
+  catkin build
 ```
 
-Open another terminal and log into the docker container :
+To ssh into the docker container, simply do :
 
 ```
 # On the host bash session
 sudo docker exec -it <CONTAINER_NAME> bash
 # Inside the container bash session
-pepper_init
+turtlebot_init
 ```
 
-Then, to start making your roscore communicate with Pepper, do :
+To check if you are already sshed into the docker container :
 
 ```
-# Inside the container bash session
-roslaunch pepper_bringup pepper_full.launch nao_ip:=<YOUR_PEPPER_IP> roscore_ip:=localhost network_interface:=<YOUR_NETWORK_INTERFACE>
+pushd / && ls && popd
 ```
 
-Open yet another terminal, log into the docker container and launch rviz to see the state of Pepper in real time :
+If you see a "ros_entrypoint.sh" file in the listing, then it means that you are inside the container.
+
+### Bonus one-liners for simulation
+
+To launch the default simulation in gazebo :
 
 ```
-# Inside the container bash session
-rviz rviz -d $HOME/catkin_ws/src/naoqi_driver/share/pepper.rviz
+roslaunch turtlebot3_gazebo turtlebot3_world.launch
 ```
 
-You'll probably need, for the laser sensors, sonars, point cloud and camera feed to display properly, to change the default  topics that are being listened by rviz to another (simply click on it in the left column and a menu proposing only the likely appropriate topics will appear).
+To launch the navigation stack :
+
+```
+roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=~/catkin_ws/src/turtlebot/turtlebot3/turtlebot3_navigation/maps/map.yaml open_rviz:=false
+```
+
+To launch rviz :
+
+```
+rviz -d ~/catkin_ws/src/turtlebot/turtlebot3/turtlebot3_navigation/rviz/turtlebot3_navigation.rviz
+```
+
+### Bonus one-liners for dev
+
+DON'T FORGET TO SPECIFY THE PATH TO YOUR DEV TOOLS (REPLACE THE <...> IN THE COMMANDS) !
+
+# Bonus - Launch Eclipse
+
+bash -i -c "turtlebot_init && <PATH_TO_ECLIPSE_EXECUTABLE>"
+
+# Bonus - Launch Pycharm
+
+bash -i -c "turtlebot_init && <PATH_TO_PYCHARM_EXECUTABLE>"
